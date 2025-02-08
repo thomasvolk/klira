@@ -8,8 +8,8 @@
     <div id="klira-app"></div>
     <script src="klira.js"></script>
     <script>
-      const url = new URL(window.location.href);
-      const score = parseInt(url.searchParams.get("score") | "0");
+      const initialUrl = new URL(window.location.href);
+      const score = parseInt(initialUrl.searchParams.get("score") | "0");
       const title = document.title;
       const state = window.history.state | {};
 
@@ -17,8 +17,8 @@
         node: document.getElementById('klira-app')
       });
 
-      app.ports.receiveScore.send(score);
-      app.ports.sendScore.subscribe(function(score) {
+      app.ports.scoreIn.send(score);
+      app.ports.scoreOut.subscribe(function(score) {
         const url = new URL(window.location.href);
         url.searchParams.set("score", score);
         window.history.pushState(state, title, url.toString());

@@ -16,22 +16,22 @@ init _ =
 
 type Msg = Increment | SendScore | ReceiveScore Int
 
-port sendScore : Int -> Cmd msg
+port scoreOut : Int -> Cmd msg
 
-port receiveScore : (Int -> msg) -> Sub msg
+port scoreIn : (Int -> msg) -> Sub msg
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    receiveScore ReceiveScore 
+    scoreIn ReceiveScore 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
     Increment ->
       let newScore = model.score + 1 in
-      ({ score = newScore }, sendScore newScore)
+      ({ score = newScore }, scoreOut newScore)
     SendScore ->
-      ({ score = model.score }, sendScore model.score)
+      ({ score = model.score }, scoreOut model.score)
     ReceiveScore score ->
       ({ score = score }, Cmd.none)
 
