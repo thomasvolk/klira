@@ -11,6 +11,10 @@
       var app = Elm.Main.init({
         node: document.getElementById('klira-app')
       });
+      app.ports.receiveScore.send(100);
+      app.ports.sendScore.subscribe(function(score) {
+        console.log("score: ", score)
+      });
     </script>
   </body>
 </html>

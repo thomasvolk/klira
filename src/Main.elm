@@ -1,33 +1,44 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Browser
 import Html exposing (Html, input, button, div, text)
 import Html.Events exposing (onClick)
 
 main =
-  Browser.sandbox { init = init, update = update, view = view }
+  Browser.element { init = init, update = update, view = view, subscriptions = subscriptions }
 
 type alias Model =
   { score : Int }
     
-init : Model
-init = 
-  { score = 1 }
+init : () -> ( Model, Cmd Msg )
+init _ = 
+  ({ score = 1 }, Cmd.none)
 
-type Msg = Increment | Decrement
+type Msg = Increment | SendScore | ReceiveScore Int
 
+port sendScore : Int -> Cmd msg
+
+port receiveScore : (Int -> msg) -> Sub msg
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    receiveScore ReceiveScore 
+
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
     Increment ->
-      { score = model.score + 1 }
+      let newScore = model.score + 1 in
+      ({ score = newScore }, sendScore newScore)
+    SendScore ->
+      ({ score = model.score }, sendScore model.score)
+    ReceiveScore score ->
+      ({ score = score }, Cmd.none)
 
-    Decrement ->
-      { score = model.score - 1 }
 
 view model =
   div []
-    [ button [ onClick Decrement ] [ text "-" ]
-    , div [] [ text (String.fromInt model.score) ]
+    [ div [] [ text (String.fromInt model.score) ]
     , button [ onClick Increment ] [ text "+" ]
     ]
 
