@@ -22,6 +22,7 @@ type Msg
     = Increment
     | SendScore
     | ReceiveScore Int
+    | ReceiveLanguage String
 
 
 port scoreOut : Int -> Cmd msg
@@ -30,10 +31,15 @@ port scoreOut : Int -> Cmd msg
 port scoreIn : (Int -> msg) -> Sub msg
 
 
+port languageIn : (String -> msg) -> Sub msg
+
+
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    scoreIn ReceiveScore
-
+  Sub.batch [
+      scoreIn ReceiveScore
+    , languageIn ReceiveLanguage 
+  ]
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -46,10 +52,13 @@ update msg model =
             ( { score = newScore }, scoreOut newScore )
 
         SendScore ->
-            ( { score = model.score }, scoreOut model.score )
+            ( model, scoreOut model.score )
 
         ReceiveScore score ->
             ( { score = score }, Cmd.none )
+
+        ReceiveLanguage lang ->
+            ( { score = model.score }, Cmd.none )
 
 
 view model =
