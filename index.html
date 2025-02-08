@@ -10,6 +10,7 @@
     <script>
       const initialUrl = new URL(window.location.href);
       const score = parseInt(initialUrl.searchParams.get("score") | "0");
+      const lang = initialUrl.searchParams.has("lang") ? initialUrl.searchParams.get("lang") : window.navigator.language;
       const title = document.title;
       const state = window.history.state | {};
 
@@ -17,7 +18,7 @@
         node: document.getElementById('klira-app')
       });
 
-      app.ports.languageIn.send(window.navigator.language);
+      app.ports.languageIn.send(lang);
       app.ports.scoreIn.send(score);
       app.ports.scoreOut.subscribe(function(score) {
         const url = new URL(window.location.href);

@@ -3,6 +3,7 @@ port module Main exposing (main)
 import Browser
 import Html exposing (Html, button, div, input, text)
 import Html.Events exposing (onClick)
+import String exposing (length, slice)
 
 
 main =
@@ -10,12 +11,16 @@ main =
 
 
 type alias Model =
-    { score : Int }
+    {   score : Int
+      , lang: String }
+
+
+defaultLanguage = "de"
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { score = 1 }, Cmd.none )
+    ( { score = 0, lang = defaultLanguage }, Cmd.none )
 
 
 type Msg
@@ -34,6 +39,15 @@ port scoreIn : (Int -> msg) -> Sub msg
 port languageIn : (String -> msg) -> Sub msg
 
 
+toLanguage : String -> String
+toLanguage lang =
+  if String.length lang < 2 then
+    defaultLanguage 
+  else
+    String.slice 0 2 lang
+
+
+
 subscriptions : Model -> Sub Msg
 subscriptions _ =
   Sub.batch [
@@ -49,20 +63,22 @@ update msg model =
                 newScore =
                     model.score + 1
             in
-            ( { score = newScore }, scoreOut newScore )
+            ( { score = newScore, lang = model.lang }, scoreOut newScore )
 
         SendScore ->
             ( model, scoreOut model.score )
 
         ReceiveScore score ->
-            ( { score = score }, Cmd.none )
+            ( { score = score, lang = model.lang }, Cmd.none )
 
         ReceiveLanguage lang ->
-            ( { score = model.score }, Cmd.none )
+            ( { score = model.score, lang = toLanguage(lang) }, Cmd.none )
 
 
 view model =
     div []
         [ div [] [ text (String.fromInt model.score) ]
         , button [ onClick Increment ] [ text "+" ]
+        , div [] [ text (model.lang) ]
+
         ]
