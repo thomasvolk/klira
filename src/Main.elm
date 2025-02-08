@@ -19,39 +19,8 @@ update msg model =
 
 view model =
   div []
-    [ input [ onClick Decrement ] [ text "-" ]
+    [ button [ onClick Decrement ] [ text "-" ]
     , div [] [ text (String.fromInt model) ]
     , button [ onClick Increment ] [ text "+" ]
     ]
 
-{-
-import Browser
-import Html exposing (Html, div, h1, text)
-import Html.Attributes exposing (style)
-
-main : Program () Model Msg
-main =
-    Browser.sandbox { init = init, update = update, view = view }
-
-type alias Model =
-    {}
-
-init : Model
-init =
-    {}
-
-type Msg
-    = NoOp
-
-update : Msg -> Model -> Model
-update msg model =
-    case msg of
-        NoOp ->
-            model
-
-view : Model -> Html Msg
-view model =
-    div [ style "text-align" "center" ]
-        [ h1 [] [ text "Hello, Elm!" ]
-        ]
--}
