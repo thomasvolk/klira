@@ -17,6 +17,7 @@
         node: document.getElementById('klira-app')
       });
 
+      app.ports.languageIn.send(window.navigator.language);
       app.ports.scoreIn.send(score);
       app.ports.scoreOut.subscribe(function(score) {
         const url = new URL(window.location.href);
