@@ -8,12 +8,20 @@
     <div id="klira-app"></div>
     <script src="klira.js"></script>
     <script>
+      const url = new URL(window.location.href);
+      const score = parseInt(url.searchParams.get("score") | "0");
+      const title = document.title;
+      const state = window.history.state | {};
+
       var app = Elm.Main.init({
         node: document.getElementById('klira-app')
       });
-      app.ports.receiveScore.send(100);
+
+      app.ports.receiveScore.send(score);
       app.ports.sendScore.subscribe(function(score) {
-        console.log("score: ", score)
+        const url = new URL(window.location.href);
+        url.searchParams.set("score", score);
+        window.history.pushState(state, title, url.toString());
       });
     </script>
   </body>
