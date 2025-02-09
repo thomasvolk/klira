@@ -5,6 +5,7 @@ import Html exposing (Html, button, div, input, text)
 import Html.Events exposing (onClick)
 import String exposing (length, slice)
 import Text
+import Http
 
 
 main =
@@ -29,6 +30,7 @@ type Msg
     | SendScore
     | ReceiveScore Int
     | ReceiveLanguage String
+    | ReceiveThankYou (Result Http.Error String)
 
 
 port scoreOut : Int -> Cmd msg
@@ -47,14 +49,19 @@ toLanguage lang =
   else
     String.slice 0 2 lang
 
-
-
 subscriptions : Model -> Sub Msg
 subscriptions _ =
   Sub.batch [
       scoreIn ReceiveScore
     , languageIn ReceiveLanguage 
   ]
+
+getThankYou : String -> Cmd Msg
+getThankYou lang =
+    Http.get
+        { url = lang ++ "/thankyou/1.json"
+        , expect = Http.expectString ReceiveThankYou
+        }
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -64,7 +71,7 @@ update msg model =
                 newScore =
                     model.score + 1
             in
-            ( { score = newScore, lang = model.lang }, scoreOut newScore )
+            ( { score = newScore, lang = model.lang }, Cmd.batch [ scoreOut newScore, getThankYou model.lang ] )
 
         SendScore ->
             ( model, scoreOut model.score )
@@ -74,6 +81,9 @@ update msg model =
 
         ReceiveLanguage lang ->
             ( { score = model.score, lang = toLanguage(lang) }, Cmd.none )
+
+        ReceiveThankYou result ->
+            ( model, Cmd.none )
 
 
 view model =
