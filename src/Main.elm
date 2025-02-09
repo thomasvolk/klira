@@ -4,6 +4,7 @@ import Browser
 import Html exposing (Html, button, div, input, text)
 import Html.Events exposing (onClick)
 import String exposing (length, slice)
+import Text
 
 
 main =
@@ -12,7 +13,7 @@ main =
 
 type alias Model =
     {   score : Int
-      , lang: String }
+      , lang : String }
 
 
 defaultLanguage = "de"
@@ -76,9 +77,12 @@ update msg model =
 
 
 view model =
+    let t = Text.package model.lang in
     div []
-        [ div [] [ text (String.fromInt model.score) ]
-        , button [ onClick Increment ] [ text "+" ]
-        , div [] [ text (model.lang) ]
-
+        [ div [] [
+            text (t.score)
+          , text (": ")
+          , text (String.fromInt model.score)
+          , button [ onClick Increment ] [ text "+" ]
         ]
+      ]
