@@ -4,8 +4,9 @@ import Browser
 import Html exposing (Html, button, div, input, text)
 import Html.Events exposing (onClick)
 import String exposing (length, slice)
-import Text
 import Http
+import Text
+import ThankYou
 
 
 main =
@@ -31,6 +32,7 @@ type Msg
     | ReceiveScore Int
     | ReceiveLanguage String
     | ReceiveThankYou (Result Http.Error String)
+    | ThankYouNumber Int
 
 
 port scoreOut : Int -> Cmd msg
@@ -56,10 +58,15 @@ subscriptions _ =
     , languageIn ReceiveLanguage 
   ]
 
-getThankYou : String -> Cmd Msg
-getThankYou lang =
-    Http.get
-        { url = lang ++ "/thankyou/1.json"
+getThankYouNumber : Cmd Msg
+getThankYouNumber =
+  ThankYou.numberGenerator ThankYouNumber
+
+
+getThankYou : String -> Int -> Cmd Msg
+getThankYou lang n =
+      Http.get
+        { url = "resources/" ++ lang ++ "/thankyou/" ++ (String.fromInt n) ++ ".json"
         , expect = Http.expectString ReceiveThankYou
         }
 
@@ -71,7 +78,10 @@ update msg model =
                 newScore =
                     model.score + 1
             in
-            ( { score = newScore, lang = model.lang }, Cmd.batch [ scoreOut newScore, getThankYou model.lang ] )
+            ( { score = newScore, lang = model.lang }, Cmd.batch [ scoreOut newScore, getThankYouNumber ] )
+
+        ThankYouNumber n ->
+            ( model, getThankYou model.lang n)
 
         SendScore ->
             ( model, scoreOut model.score )

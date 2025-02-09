@@ -1,4 +1,4 @@
-module Text exposing (..)
+module Text exposing (package)
 
 import Dict
 
