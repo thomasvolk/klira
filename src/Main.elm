@@ -5,6 +5,7 @@ import Html exposing (Html, button, div, input, text)
 import Html.Events exposing (onClick)
 import String exposing (length, slice)
 import Http
+import Json.Decode as JD
 import Text
 import ThankYou
 
@@ -15,7 +16,9 @@ main =
 
 type alias Model =
     {   score : Int
-      , lang : String }
+      , lang : String
+      , message : String
+    }
 
 
 defaultLanguage = "de"
@@ -23,7 +26,7 @@ defaultLanguage = "de"
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { score = 0, lang = defaultLanguage }, Cmd.none )
+    ( { score = 0, lang = defaultLanguage, message = "" }, Cmd.none )
 
 
 type Msg
@@ -31,7 +34,7 @@ type Msg
     | SendScore
     | ReceiveScore Int
     | ReceiveLanguage String
-    | ReceiveThankYou (Result Http.Error String)
+    | ReceiveThankYou (Result Http.Error ThankYou.ThankYou)
     | ThankYouNumber Int
 
 
@@ -63,11 +66,18 @@ getThankYouNumber =
   ThankYou.numberGenerator ThankYouNumber
 
 
+thankYouDecoder : JD.Decoder ThankYou.ThankYou
+thankYouDecoder =
+    JD.map2 ThankYou.ThankYou
+      (JD.field "kind" JD.string)
+      (JD.field "content" JD.string)
+
+
 getThankYou : String -> Int -> Cmd Msg
 getThankYou lang n =
       Http.get
         { url = "resources/" ++ lang ++ "/thankyou/" ++ (String.fromInt n) ++ ".json"
-        , expect = Http.expectString ReceiveThankYou
+        , expect = Http.expectJson ReceiveThankYou thankYouDecoder
         }
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -78,7 +88,10 @@ update msg model =
                 newScore =
                     model.score + 1
             in
-            ( { score = newScore, lang = model.lang }, Cmd.batch [ scoreOut newScore, getThankYouNumber ] )
+            ( 
+                { score = newScore, lang = model.lang, message = model.message }
+              , Cmd.batch [ scoreOut newScore, getThankYouNumber ]
+            )
 
         ThankYouNumber n ->
             ( model, getThankYou model.lang n)
@@ -87,22 +100,29 @@ update msg model =
             ( model, scoreOut model.score )
 
         ReceiveScore score ->
-            ( { score = score, lang = model.lang }, Cmd.none )
+            ( { score = score, lang = model.lang, message = model.message }, Cmd.none )
 
         ReceiveLanguage lang ->
-            ( { score = model.score, lang = toLanguage(lang) }, Cmd.none )
+            ( { score = model.score, lang = toLanguage(lang), message = model.message }, Cmd.none )
 
         ReceiveThankYou result ->
-            ( model, Cmd.none )
+            case result of
+              Ok thankYou ->
+                ( { score = model.score, lang = model.lang, message = thankYou.content }, Cmd.none )
+              Err _ -> 
+                ( model, Cmd.none )
 
 
 view model =
     let t = Text.package model.lang in
     div []
-        [ div [] [
-            text (t.score)
-          , text (": ")
-          , text (String.fromInt model.score)
-          , button [ onClick Increment ] [ text "+" ]
+        [   div [] [
+              text (t.score)
+            , text (": ")
+            , text (String.fromInt model.score)
+            , button [ onClick Increment ] [ text "+" ]
+            ]
+          , div [] [
+              text (model.message)
+            ]
         ]
-      ]
