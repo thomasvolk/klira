@@ -4,14 +4,18 @@ import Random
 
 
 type alias ThankYou =
-  {   kind : String
+    { kind : String
     , content : String
-  }
-
-count = 3
-
-generator = Random.int 1 count
-
-numberGenerator m = Random.generate m generator
+    }
 
 
+count =
+    3
+
+
+generator =
+    Random.int 1 count
+
+
+numberGenerator m =
+    Random.generate m generator

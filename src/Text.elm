@@ -2,31 +2,33 @@ module Text exposing (package)
 
 import Dict
 
+
 type alias Package =
-  {
-      title : String
+    { title : String
     , score : String
-  }
+    }
 
 
 dePackage =
-  {
-      title = "Klira"
+    { title = "Klira"
     , score = "Deine Punkte"
-  }
-
-defaultPackage = dePackage
-
-packages = 
-  Dict.fromList [
-    ("de", dePackage)
-  ]
+    }
 
 
-package lang = 
-  case Dict.get lang packages of
-    
-    Just p -> p
+defaultPackage =
+    dePackage
 
-    Nothing -> defaultPackage
 
+packages =
+    Dict.fromList
+        [ ( "de", dePackage )
+        ]
+
+
+package lang =
+    case Dict.get lang packages of
+        Just p ->
+            p
+
+        Nothing ->
+            defaultPackage
