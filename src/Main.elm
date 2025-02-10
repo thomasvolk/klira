@@ -1,15 +1,16 @@
 port module Main exposing (main)
 
 import Browser
-import Html exposing (Html, button, div, input, text)
+import Html exposing (button, div, text)
 import Html.Events exposing (onClick)
-import String exposing (length, slice)
+import String
 import Http
 import Json.Decode as JD
 import Text
 import ThankYou
 
 
+main : Program () Model Msg
 main =
     Browser.element { init = init, update = update, view = view, subscriptions = subscriptions }
 
@@ -21,6 +22,7 @@ type alias Model =
     }
 
 
+defaultLanguage : String
 defaultLanguage = "de"
 
 
@@ -112,7 +114,7 @@ update msg model =
               Err _ -> 
                 ( model, Cmd.none )
 
-
+view : Model -> Html.Html Msg
 view model =
     let t = Text.package model.lang in
     div []
