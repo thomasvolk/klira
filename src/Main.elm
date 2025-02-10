@@ -5,7 +5,7 @@ import Html exposing (button, div, text)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode as JD
-import Model exposing (Model, setLang, setMessage, setScore)
+import Model exposing (Model, setLang, setMessage, setScore, setError)
 import String
 import Text
 import ThankYou
@@ -16,14 +16,9 @@ main =
     Browser.element { init = init, update = update, view = view, subscriptions = subscriptions }
 
 
-defaultLanguage : String
-defaultLanguage =
-    "de"
-
-
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { score = 0, lang = defaultLanguage, message = "" }, Cmd.none )
+    ( Model.new, Cmd.none )
 
 
 type Msg
@@ -47,7 +42,7 @@ port languageIn : (String -> msg) -> Sub msg
 toLanguage : String -> String
 toLanguage lang =
     if String.length lang < 2 then
-        defaultLanguage
+        Model.defaultLanguage
 
     else
         String.slice 0 2 lang
@@ -89,7 +84,7 @@ update msg model =
                 newScore =
                     model.score + 1
             in
-            ( { score = newScore, lang = model.lang, message = model.message }
+            ( setScore model newScore
             , Cmd.batch [ scoreOut newScore, getThankYouNumber ]
             )
 
@@ -111,7 +106,7 @@ update msg model =
                     ( setMessage model thankYou.content, Cmd.none )
 
                 Err _ ->
-                    ( model, Cmd.none )
+                    ( setError model True, Cmd.none )
 
 
 view : Model -> Html.Html Msg
