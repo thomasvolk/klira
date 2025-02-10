@@ -1,4 +1,4 @@
-module ThankYou exposing (..)
+module ThankYou exposing (numberGenerator, ThankYou)
 
 import Random
 
@@ -9,13 +9,16 @@ type alias ThankYou =
     }
 
 
+count : number
 count =
     3
 
 
+generator : Random.Generator Int
 generator =
     Random.int 1 count
 
 
+numberGenerator : (Int -> msg) -> Cmd msg 
 numberGenerator m =
     Random.generate m generator
