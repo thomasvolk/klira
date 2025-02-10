@@ -5,6 +5,7 @@ import Html exposing (button, div, text)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode as JD
+import Model exposing (Model, setLang, setMessage, setScore)
 import String
 import Text
 import ThankYou
@@ -13,13 +14,6 @@ import ThankYou
 main : Program () Model Msg
 main =
     Browser.element { init = init, update = update, view = view, subscriptions = subscriptions }
-
-
-type alias Model =
-    { score : Int
-    , lang : String
-    , message : String
-    }
 
 
 defaultLanguage : String
@@ -106,15 +100,15 @@ update msg model =
             ( model, scoreOut model.score )
 
         ReceiveScore score ->
-            ( { score = score, lang = model.lang, message = model.message }, Cmd.none )
+            ( setScore model score, Cmd.none )
 
         ReceiveLanguage lang ->
-            ( { score = model.score, lang = toLanguage lang, message = model.message }, Cmd.none )
+            ( setLang model (toLanguage lang), Cmd.none )
 
         ReceiveThankYou result ->
             case result of
                 Ok thankYou ->
-                    ( { score = model.score, lang = model.lang, message = thankYou.content }, Cmd.none )
+                    ( setMessage model thankYou.content, Cmd.none )
 
                 Err _ ->
                     ( model, Cmd.none )
