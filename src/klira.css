@@ -1,0 +1,22 @@
+body {
+  width: 100%;
+  font-family: 'Courier New', Courier, monospace;
+  font-style: normal;
+  font-size: 20px;
+  padding: 0px;
+  margin: 0px;
+  color: #ccc;
+  background-color: #000;
+}
+
+main {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+div .row span {
+  padding-right: 15px;
+  padding-left: 15px;
+}

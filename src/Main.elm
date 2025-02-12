@@ -1,11 +1,12 @@
 port module Main exposing (main)
 
 import Browser
-import Html exposing (button, div, text)
+import Html exposing (button, div, span, text)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode as JD
-import Model exposing (Model, setLang, setMessage, setScore, setError)
+import Model exposing (Model, setError, setLang, setMessage, setScore)
 import String
 import Text
 import ThankYou
@@ -116,13 +117,19 @@ view model =
             Text.package model.lang
     in
     div []
-        [ div []
-            [ text t.score
-            , text ": "
-            , text (String.fromInt model.score)
-            , button [ onClick Increment ] [ text "+" ]
+        [ div [ class "row" ]
+            [ span []
+                [ text t.score
+                , text ": "
+                , text (String.fromInt model.score)
+                ]
+            , span []
+                [ button [ onClick Increment ] [ text "+" ]
+                ]
             ]
-        , div []
-            [ text model.message
+        , div [ class "row" ]
+            [ span []
+                [ text model.message
+                ]
             ]
         ]

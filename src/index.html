@@ -3,29 +3,32 @@
   <head>
     <meta charset="UTF-8">
     <title>My Klira App</title>
+    <link rel="stylesheet" href="klira.css">
   </head>
   <body>
-    <div id="klira-app"></div>
-    <script src="klira.js"></script>
-    <script>
-      const initialUrl = new URL(window.location.href);
-      const score = parseInt(initialUrl.searchParams.get("score") | "0");
-      const lang = initialUrl.searchParams.has("lang") ? initialUrl.searchParams.get("lang") : window.navigator.language;
-      const title = document.title;
-      const state = window.history.state | {};
+    <main>
+      <div id="klira-app"></div>
+      <script src="klira.js"></script>
+      <script>
+        const initialUrl = new URL(window.location.href);
+        const score = parseInt(initialUrl.searchParams.get("score") | "0");
+        const lang = initialUrl.searchParams.has("lang") ? initialUrl.searchParams.get("lang") : window.navigator.language;
+        const title = document.title;
+        const state = window.history.state | {};
 
-      var app = Elm.Main.init({
-        node: document.getElementById('klira-app')
-      });
+        var app = Elm.Main.init({
+          node: document.getElementById('klira-app')
+        });
 
-      app.ports.languageIn.send(lang);
-      app.ports.scoreIn.send(score);
-      app.ports.scoreOut.subscribe(function(score) {
-        const url = new URL(window.location.href);
-        url.searchParams.set("score", score);
-        window.history.pushState(state, title, url.toString());
-      });
-    </script>
+        app.ports.languageIn.send(lang);
+        app.ports.scoreIn.send(score);
+        app.ports.scoreOut.subscribe(function(score) {
+          const url = new URL(window.location.href);
+          url.searchParams.set("score", score);
+          window.history.pushState(state, title, url.toString());
+        });
+      </script>
+    </main>
   </body>
 </html>
 

@@ -5,6 +5,7 @@ build:
 	elm make --optimize src/Main.elm --output=out/klira.js
 	cp src/index.html out/
 	cp -r src/resources out/
+	cp src/klira.css out/
 
 clean:
 	rm -rf out
