@@ -117,19 +117,26 @@ view model =
             Text.package model.lang
     in
     div []
-        [ div [ class "row" ]
+        [ div [ class "section" ]
+        [
+                 div [ class "score" ]
             [ span []
                 [ text t.score
                 , text ": "
-                , text (String.fromInt model.score)
+                ]
+            , span [] [
+                  text (String.fromInt model.score)
                 ]
             , span []
                 [ button [ onClick Increment ] [ text "+" ]
                 ]
             ]
-        , div [ class "row" ]
-            [ span []
-                [ text model.message
-                ]
+            ]
+        , div [ class "section" ]
+            [ 
+                 div [ class "message" ]
+                
+                    [ text model.message
+                    ]
             ]
         ]
