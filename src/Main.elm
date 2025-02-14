@@ -118,25 +118,22 @@ view model =
     in
     div []
         [ div [ class "section" ]
-        [
-                 div [ class "score" ]
-            [ span []
-                [ text t.score
-                , text ": "
+            [ div [ class "score" ]
+                [ span []
+                    [ text t.score
+                    , text ": "
+                    ]
+                , span []
+                    [ text (String.fromInt model.score)
+                    ]
+                , span []
+                    [ button [ onClick Increment ] [ text "+" ]
+                    ]
                 ]
-            , span [] [
-                  text (String.fromInt model.score)
-                ]
-            , span []
-                [ button [ onClick Increment ] [ text "+" ]
-                ]
-            ]
             ]
         , div [ class "section" ]
-            [ 
-                 div [ class "message" ]
-                
-                    [ text model.message
-                    ]
+            [ div [ class "message" ]
+                [ text model.message
+                ]
             ]
         ]
