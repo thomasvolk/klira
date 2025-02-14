@@ -118,6 +118,12 @@ view model =
     in
     div []
         [ div [ class "section" ]
+            [ div [ class "title" ]
+                [
+                text ("Klira")
+                ]
+              ]
+        , div [ class "section" ]
             [ div [ class "score" ]
                 [ span []
                     [ text t.score

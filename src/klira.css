@@ -19,6 +19,8 @@ main {
 div .section {
   align-content: center;
   align-items: center;
+  padding-top: 60px;
+  padding-bottom: 60px;
 }
 
 div .score {
@@ -52,4 +54,15 @@ button {
   font-family: 'Lucida Console', Console, monospace;
   font-style: normal;
   font-size: 48px;
+}
+
+div .title {
+  color: #a3a3c2;
+  font-family: 'Lucida Console', Console, monospace;
+  font-style: normal;
+  font-size: 96px;
+  width: 100%;
+  text-align: center;
+  padding-top: 120px;
+  padding-bottom: 30px;
 }
