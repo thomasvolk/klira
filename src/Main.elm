@@ -119,10 +119,9 @@ view model =
     div []
         [ div [ class "section" ]
             [ div [ class "title" ]
-                [
-                text ("Klira")
+                [ text "Klira"
                 ]
-              ]
+            ]
         , div [ class "section" ]
             [ div [ class "score" ]
                 [ span []
