@@ -96,7 +96,7 @@ update msg model =
             ( model, scoreOut model.score )
 
         ReceiveScore score ->
-            ( setScore model score, Cmd.none )
+            ( setScore model score, scoreOut score )
 
         ReceiveLanguage lang ->
             ( setLang model (toLanguage lang), Cmd.none )
