@@ -11,7 +11,28 @@
       <script src="klira.js"></script>
       <script>
         const initialUrl = new URL(window.location.href);
-        const score = parseInt(initialUrl.searchParams.get("score") | "0");
+
+        function getScore() {
+          let scoreStr = localStorage.getItem('klira-score');
+          if (scoreStr == null) {
+            scoreStr = initialUrl.searchParams.get("score") | "0";
+          }
+          return parseInt(scoreStr)
+        }
+
+        function setScore(score) {
+          const url = new URL(window.location.href);
+          url.searchParams.set("score", score);
+          window.history.pushState(state, title, url.toString());
+          localStorage.setItem('klira-score', score);
+        }
+
+        const reset = initialUrl.searchParams.has("reset")
+        if (reset) {
+          localStorage.clear();
+        }
+
+        const score = getScore();
         const lang = initialUrl.searchParams.has("lang") ? initialUrl.searchParams.get("lang") : window.navigator.language;
         const title = document.title;
         const state = window.history.state | {};
@@ -22,11 +43,7 @@
 
         app.ports.languageIn.send(lang);
         app.ports.scoreIn.send(score);
-        app.ports.scoreOut.subscribe(function(score) {
-          const url = new URL(window.location.href);
-          url.searchParams.set("score", score);
-          window.history.pushState(state, title, url.toString());
-        });
+        app.ports.scoreOut.subscribe(setScore);
       </script>
     </main>
   </body>
