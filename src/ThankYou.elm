@@ -1,4 +1,4 @@
-module ThankYou exposing (numberGenerator, ThankYou)
+module ThankYou exposing (ThankYou, numberGenerator)
 
 import Random
 
@@ -19,6 +19,6 @@ generator =
     Random.int 1 count
 
 
-numberGenerator : (Int -> msg) -> Cmd msg 
+numberGenerator : (Int -> msg) -> Cmd msg
 numberGenerator m =
     Random.generate m generator

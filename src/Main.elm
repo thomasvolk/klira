@@ -1,18 +1,15 @@
 port module Main exposing (main)
 
 import Browser
-import Html exposing (a, button, div, span, text, input)
+import Html exposing (a, button, div, input, span, text)
 import Html.Attributes exposing (class, href, style, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Http
 import Json.Decode as JD
-import Model exposing (Model, Page, setError, setLang, setMessage, setScore, toggleMenu, setMenu, setPage)
-import Http
-import ThankYou
+import Model exposing (Model, Page(..), setError, setLang, setMenu, setMessage, setPage, setScore, toggleMenu)
 import String
 import Text
 import ThankYou
-import Model exposing (Page(..))
 
 
 type Msg
@@ -35,6 +32,7 @@ main =
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( Model.new, Cmd.none )
+
 
 port scoreOut : Int -> Cmd msg
 
@@ -122,8 +120,11 @@ update msg model =
 
         ResetScore s ->
             case String.toInt s of
-              Just i -> ( setScore model i, scoreOut i)
-              Nothing -> ( setScore model 0, Cmd.none)
+                Just i ->
+                    ( setScore model i, scoreOut i )
+
+                Nothing ->
+                    ( setScore model 0, Cmd.none )
 
 
 mainPage : Model -> Text.Package -> Html.Html Msg
@@ -172,11 +173,11 @@ mainPage model t =
             ]
         ]
 
-dialog :  Model -> String -> (Model -> Html.Html Msg) -> Html.Html Msg
+
+dialog : Model -> String -> (Model -> Html.Html Msg) -> Html.Html Msg
 dialog model title f =
-  div []
-    [
-         div [ class "section" ]
+    div []
+        [ div [ class "section" ]
             [ div [ class "header" ]
                 [ div [ class "menu" ]
                     [ div [] [ button [ onClick (OpenPage Main) ] [ text "X" ] ]
@@ -186,24 +187,27 @@ dialog model title f =
                 [ text title
                 ]
             ]
-       , div [ class "section" ]
-         [ f model ]
-    ]
+        , div [ class "section" ]
+            [ f model ]
+        ]
+
 
 setScorePage : Text.Package -> Model -> Html.Html Msg
 setScorePage t model =
-  div [] [
-     div [ class "section" ]
-        [ text t.setScore, text ":"
+    div []
+        [ div [ class "section" ]
+            [ text t.setScore
+            , text ":"
+            ]
+        , div [ class "section" ]
+            [ input [ type_ "number", value (String.fromInt model.score), onInput ResetScore ] []
+            ]
         ]
-    , div [ class "section" ]
-        [ input [ type_ "number", value (String.fromInt model.score), onInput ResetScore ]  []
-        ]
-    ]
 
-helpPage  : Text.Package -> Model -> Html.Html Msg
-helpPage t _ = div [] [ text t.helpText ]
 
+helpPage : Text.Package -> Model -> Html.Html Msg
+helpPage t _ =
+    div [] [ text t.helpText ]
 
 
 view : Model -> Html.Html Msg
@@ -213,6 +217,11 @@ view model =
             Text.package model.lang
     in
     case model.page of
-      Main -> mainPage model t
-      Help -> dialog model t.help (helpPage t)
-      SetScore -> dialog model t.reset (setScorePage t) 
+        Main ->
+            mainPage model t
+
+        Help ->
+            dialog model t.help (helpPage t)
+
+        SetScore ->
+            dialog model t.reset (setScorePage t)

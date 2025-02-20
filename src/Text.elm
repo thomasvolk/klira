@@ -6,10 +6,10 @@ import Dict
 type alias Package =
     { title : String
     , score : String
-    , reset: String
-    , help: String
-    , helpText: String
-    , setScore: String
+    , reset : String
+    , help : String
+    , helpText : String
+    , setScore : String
     }
 
 
@@ -19,10 +19,11 @@ dePackage =
     , score = "Deine Punkte"
     , reset = "Punkte setzen"
     , help = "Hilfe"
-    , helpText = "Die Klira app kann Dich motivieren im Alltag etwas für "
-              ++ "Nachhaltigkeit, Klimaschutz und Artenvielfalt zu tun."
-              ++ "Immer wenn Du Dich für eine gute Tat entscheidest, "
-              ++ "drückst Du den + button und gibst Dir einen Punk."
+    , helpText =
+        "Die Klira app kann Dich motivieren im Alltag etwas für "
+            ++ "Nachhaltigkeit, Klimaschutz und Artenvielfalt zu tun."
+            ++ "Immer wenn Du Dich für eine gute Tat entscheidest, "
+            ++ "drückst Du den + button und gibst Dir einen Punk."
     , setScore = "Hier kannst Du Deine Punkte setzen"
     }
 
