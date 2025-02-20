@@ -6,12 +6,25 @@ import Html.Attributes exposing (class, href, style, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Http
 import Json.Decode as JD
-import Model exposing (Model, setError, setLang, setMessage, setScore, toggleMenu, setMenu, setPage)
+import Model exposing (Model, Page, setError, setLang, setMessage, setScore, toggleMenu, setMenu, setPage)
+import Http
+import ThankYou
 import String
 import Text
 import ThankYou
 import Model exposing (Page(..))
-import Update exposing (Msg(..))
+
+
+type Msg
+    = Increment
+    | SendScore
+    | ReceiveScore Int
+    | ReceiveLanguage String
+    | ReceiveThankYou (Result Http.Error ThankYou.ThankYou)
+    | ThankYouNumber Int
+    | ToggleMenu
+    | OpenPage Page
+    | ResetScore String
 
 
 main : Program () Model Msg
