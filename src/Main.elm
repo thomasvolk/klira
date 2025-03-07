@@ -1,7 +1,7 @@
 port module Main exposing (main)
 
 import Browser
-import Html exposing (a, button, div, input, span, text)
+import Html exposing (a, button, div, input, span, text, p)
 import Html.Attributes exposing (class, href, style, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Http
@@ -207,7 +207,9 @@ setScorePage t model =
 
 helpPage : Text.Package -> Model -> Html.Html Msg
 helpPage t _ =
-    div [] [ text t.helpText ]
+    let hs = String.split "\n" t.helpText |> List.map (\s -> p [] [ text s ] )
+    in
+    div [] hs
 
 
 view : Model -> Html.Html Msg

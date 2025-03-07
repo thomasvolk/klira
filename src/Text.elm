@@ -24,6 +24,12 @@ dePackage =
             ++ "Nachhaltigkeit, Klimaschutz und Artenvielfalt zu tun."
             ++ "Immer wenn Du Dich für eine gute Tat entscheidest, "
             ++ "drückst Du den + button und gibst Dir einen Punk."
+            ++ "\n"
+            ++ "Du kannst selbst entscheiden für was und wie viele "
+            ++ "Punkte Du Dir geben magst."
+            ++ "\n"
+            ++ "Zum Beispiel vegetarisches Essen, öffentliche Verkehrsmittel,"
+            ++ "Verpackungen vermeiden, ..."
     , setScore = "Hier kannst Du Deine Punkte setzen"
     }
 
