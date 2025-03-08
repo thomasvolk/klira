@@ -11,7 +11,7 @@ type alias ThankYou =
 
 count : number
 count =
-    3
+    6
 
 
 generator : Random.Generator Int
