@@ -30,6 +30,12 @@ dePackage =
             ++ "\n"
             ++ "Zum Beispiel vegetarisches Essen, öffentliche Verkehrsmittel,"
             ++ "Verpackungen vermeiden, ..."
+            ++ "\n"
+            ++ "Diese App gibt es nur als Webseite in Deinem Browser. "
+            ++ "Auch nur dort werden deine Punkte gespeichert. Falls Du "
+            ++ "die App auf einem andren Gerät oder Browser mit Deinen "
+            ++ "Punkten öffnen willst, dann schickte/kopiere die URL "
+            ++ "aus dem Adressfeld Deines Browsers."
     , setScore = "Hier kannst Du Deine Punkte setzen"
     }
 
