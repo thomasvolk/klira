@@ -75,7 +75,7 @@ thankYouDecoder =
 getThankYou : String -> Int -> Cmd Msg
 getThankYou lang n =
     Http.get
-        { url = "resources/" ++ lang ++ "/thankyou/" ++ String.fromInt n ++ ".json"
+        { url = "resources/" ++ "thankyou/" ++ lang ++ "/" ++ String.fromInt n ++ ".json"
         , expect = Http.expectJson ReceiveThankYou thankYouDecoder
         }
 
