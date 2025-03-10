@@ -214,7 +214,7 @@ dialog model title f =
         [ div [ class "section" ]
             [ div [ class "header" ]
                 [ div [ class "menu" ]
-                    [ div [] [ button [ onClick (OpenPage Main) ] [ text "X" ] ]
+                    [ div [] [ button [ class "menu-button", onClick (OpenPage Main) ] [ text "X" ] ]
                     ]
                 ]
             , div []
