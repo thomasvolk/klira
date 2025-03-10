@@ -1,3 +1,4 @@
 *.js
 elm-stuff/
 out
+.DS_Store
