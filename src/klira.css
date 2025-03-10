@@ -56,12 +56,20 @@ div .message {
 
 button {
   margin: 0px 15px 0px 15px;
-  width: 64px;
-  height: 64px;
   background: #a3a3c2;
   font-family: 'Lucida Console', Console, monospace;
   font-style: normal;
   font-size: 48px;
+}
+
+.plus-button {
+  height: 100px;
+  width: 300px;
+}
+
+.menu-button {
+  height: 80px;
+  width: 80px;
 }
 
 div .header div {
