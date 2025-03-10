@@ -1,4 +1,4 @@
-module ThankYou exposing (ThankYou, numberGenerator)
+module ThankYou exposing (ThankYou, Config, choose)
 
 import Random
 
@@ -8,17 +8,16 @@ type alias ThankYou =
     , content : String
     }
 
+type alias Config =
+  { count: Int
+  }
 
-count : number
-count =
-    6
 
-
-generator : Random.Generator Int
-generator =
+generator : Int -> Random.Generator Int
+generator count =
     Random.int 1 count
 
 
-numberGenerator : (Int -> msg) -> Cmd msg
-numberGenerator m =
-    Random.generate m generator
+choose : Int -> (Int -> msg) -> Cmd msg
+choose count m =
+    Random.generate m (generator count)

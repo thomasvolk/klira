@@ -6,10 +6,11 @@ import Html.Attributes exposing (class, href, style, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Http
 import Json.Decode as JD
-import Model exposing (Model, Page(..), setError, setLang, setMenu, setMessage, setPage, setScore, toggleMenu)
+import Model exposing (Model, Page(..), setError, setLang, setMenu, setMessage, setPage, setScore, toggleMenu, setThankYouCount)
 import String
 import Text
 import ThankYou
+import Model exposing (setThankYouCount)
 
 
 type Msg
@@ -18,6 +19,7 @@ type Msg
     | ReceiveScore Int
     | ReceiveLanguage String
     | ReceiveThankYou (Result Http.Error ThankYou.ThankYou)
+    | ReceiveThankYouConfig (Result Http.Error ThankYou.Config)
     | ThankYouNumber Int
     | ToggleMenu
     | OpenPage Page
@@ -60,9 +62,9 @@ subscriptions _ =
         ]
 
 
-getThankYouNumber : Cmd Msg
-getThankYouNumber =
-    ThankYou.numberGenerator ThankYouNumber
+getThankYouNumber : Int -> Cmd Msg
+getThankYouNumber count =
+    ThankYou.choose count ThankYouNumber
 
 
 thankYouDecoder : JD.Decoder ThankYou.ThankYou
@@ -80,6 +82,20 @@ getThankYou lang n =
         }
 
 
+thankYouConfigDecoder : JD.Decoder ThankYou.Config
+thankYouConfigDecoder =
+    JD.map ThankYou.Config
+        (JD.field "count" JD.int)
+
+
+getThankYouConfig : String -> Cmd Msg
+getThankYouConfig lang = 
+    Http.get
+        { url = "resources/" ++ "thankyou/" ++ lang ++ "/0.config.json"
+        , expect = Http.expectJson ReceiveThankYouConfig thankYouConfigDecoder
+        }
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -91,8 +107,14 @@ update msg model =
                 newScore =
                     model.score + 1
             in
+            let nextCmd = case model.thankYouCount of
+                            Just count ->
+                              [ getThankYouNumber count ]
+                            Nothing ->
+                              [ getThankYouConfig  model.lang ]
+            in
             ( setScore model newScore
-            , Cmd.batch [ scoreOut newScore, getThankYouNumber ]
+            , Cmd.batch ([ scoreOut newScore ]  ++ nextCmd)
             )
 
         ThankYouNumber n ->
@@ -111,6 +133,14 @@ update msg model =
             case result of
                 Ok thankYou ->
                     ( setMessage model thankYou.content, Cmd.none )
+
+                Err _ ->
+                    ( setError model True, Cmd.none )
+
+        ReceiveThankYouConfig config ->
+            case config of
+                Ok cfg ->
+                    ( setThankYouCount model (Just cfg.count), getThankYouNumber cfg.count )
 
                 Err _ ->
                     ( setError model True, Cmd.none )
