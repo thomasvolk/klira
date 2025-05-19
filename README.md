@@ -21,4 +21,4 @@ Run the server:
 
 Open in the Browser:
 
-    http://localhost:8000/out/index.html
+http://localhost:8000/out/index.html
