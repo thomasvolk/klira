@@ -55,7 +55,7 @@ enPackage =
 
 defaultPackage : Package
 defaultPackage =
-    dePackage
+    enPackage
 
 
 packages : Dict.Dict String Package
